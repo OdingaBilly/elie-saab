@@ -9,8 +9,32 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ResidencesRouteImport } from './routes/residences'
+import { Route as MasterplanRouteImport } from './routes/masterplan'
+import { Route as GalleryRouteImport } from './routes/gallery'
+import { Route as EnquiryRouteImport } from './routes/enquiry'
 import { Route as IndexRouteImport } from './routes/index'
 
+const ResidencesRoute = ResidencesRouteImport.update({
+  id: '/residences',
+  path: '/residences',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MasterplanRoute = MasterplanRouteImport.update({
+  id: '/masterplan',
+  path: '/masterplan',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GalleryRoute = GalleryRouteImport.update({
+  id: '/gallery',
+  path: '/gallery',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EnquiryRoute = EnquiryRouteImport.update({
+  id: '/enquiry',
+  path: '/enquiry',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -19,28 +43,72 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/enquiry': typeof EnquiryRoute
+  '/gallery': typeof GalleryRoute
+  '/masterplan': typeof MasterplanRoute
+  '/residences': typeof ResidencesRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/enquiry': typeof EnquiryRoute
+  '/gallery': typeof GalleryRoute
+  '/masterplan': typeof MasterplanRoute
+  '/residences': typeof ResidencesRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/enquiry': typeof EnquiryRoute
+  '/gallery': typeof GalleryRoute
+  '/masterplan': typeof MasterplanRoute
+  '/residences': typeof ResidencesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/enquiry' | '/gallery' | '/masterplan' | '/residences'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/enquiry' | '/gallery' | '/masterplan' | '/residences'
+  id: '__root__' | '/' | '/enquiry' | '/gallery' | '/masterplan' | '/residences'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  EnquiryRoute: typeof EnquiryRoute
+  GalleryRoute: typeof GalleryRoute
+  MasterplanRoute: typeof MasterplanRoute
+  ResidencesRoute: typeof ResidencesRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/residences': {
+      id: '/residences'
+      path: '/residences'
+      fullPath: '/residences'
+      preLoaderRoute: typeof ResidencesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/masterplan': {
+      id: '/masterplan'
+      path: '/masterplan'
+      fullPath: '/masterplan'
+      preLoaderRoute: typeof MasterplanRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/gallery': {
+      id: '/gallery'
+      path: '/gallery'
+      fullPath: '/gallery'
+      preLoaderRoute: typeof GalleryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/enquiry': {
+      id: '/enquiry'
+      path: '/enquiry'
+      fullPath: '/enquiry'
+      preLoaderRoute: typeof EnquiryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -53,17 +121,11 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  EnquiryRoute: EnquiryRoute,
+  GalleryRoute: GalleryRoute,
+  MasterplanRoute: MasterplanRoute,
+  ResidencesRoute: ResidencesRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
