@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { z } from "zod";
+import { RESIDENCES } from "@/lib/residences";
 
 export const Route = createFileRoute("/enquiry")({
   head: () => ({
@@ -13,6 +14,8 @@ export const Route = createFileRoute("/enquiry")({
   component: Enquiry,
 });
 
+const RESIDENCE_NAMES = RESIDENCES.map((r) => r.name) as [string, ...string[]];
+
 const schema = z.object({
   name: z.string().trim().min(2, "A name, please.").max(80, "A little shorter."),
   email: z.string().trim().email("A valid email, please.").max(160),
@@ -22,7 +25,12 @@ const schema = z.object({
     .max(40)
     .optional()
     .refine((v) => !v || /^[+()0-9\s.\-]{6,}$/.test(v), "A telephone as it would be dialled."),
-  residence: z.string().trim().max(80).optional(),
+  residence: z
+    .string()
+    .trim()
+    .max(80)
+    .optional()
+    .refine((v) => !v || RESIDENCE_NAMES.includes(v), "Please choose from the collection."),
   time: z.string().trim().max(80).optional(),
   country: z.string().trim().max(80).optional(),
   message: z.string().trim().max(1000, "A shorter note, please.").optional(),
@@ -35,10 +43,10 @@ const FIELDS: { name: FieldName; label: string; type?: string; required?: boolea
   { name: "name", label: "Name", required: true, className: "col-span-12 md:col-span-6" },
   { name: "email", label: "Email", type: "email", required: true, className: "col-span-12 md:col-span-6" },
   { name: "tel", label: "Telephone", type: "tel", className: "col-span-12 md:col-span-6" },
-  { name: "residence", label: "Preferred residence", placeholder: "The Atelier · The Salon · The Maison · Penthouse", className: "col-span-12 md:col-span-6" },
   { name: "time", label: "Preferred contact time", placeholder: "Morning · Afternoon · Evening", className: "col-span-12 md:col-span-6" },
   { name: "country", label: "Country", className: "col-span-12 md:col-span-6" },
 ];
+
 
 function Enquiry() {
   const [sent, setSent] = useState(false);
