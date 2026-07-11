@@ -293,7 +293,6 @@ function Landscape() {
 /* CHAPTER V — LIVING SPACES                           */
 /* ————————————————————————————————————————————————— */
 
-import { RESIDENCES } from "@/lib/residences";
 
 const residences = RESIDENCES.map((r) => ({
   code: r.code,
