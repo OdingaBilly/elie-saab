@@ -248,3 +248,45 @@ function FieldError({ id, message }: { id: string; message?: string }) {
     </AnimatePresence>
   );
 }
+
+function ResidenceSelect({
+  value, error, onChange, onBlur,
+}: {
+  value: string; error?: string; onChange: (v: string) => void; onBlur: () => void;
+}) {
+  const errorId = "residence-error";
+  return (
+    <div className="col-span-12 md:col-span-6">
+      <label htmlFor="residence" className="eyebrow block">
+        Preferred residence
+      </label>
+      <div className={`relative mt-4 border-0 border-b ${error ? "border-bronze" : "border-hairline focus-within:border-bronze"}`}>
+        <select
+          id="residence"
+          name="residence"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          onBlur={onBlur}
+          aria-invalid={!!error}
+          aria-describedby={error ? errorId : undefined}
+          className={`w-full appearance-none bg-transparent pb-3 pr-8 font-display text-2xl font-light italic focus:outline-none focus:ring-0 ${value ? "text-charcoal" : "text-stone/60"}`}
+        >
+          <option value="">Select from the collection…</option>
+          {RESIDENCES.map((r) => {
+            const unavailable = r.availability === "Reserved";
+            return (
+              <option key={r.code} value={r.name} disabled={unavailable}>
+                {r.name} — {r.area} · {r.availability}
+              </option>
+            );
+          })}
+        </select>
+        <span aria-hidden className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 text-[10px] uppercase tracking-[0.32em] text-stone">
+          ▾
+        </span>
+      </div>
+      <FieldError id={errorId} message={error} />
+    </div>
+  );
+}
+
