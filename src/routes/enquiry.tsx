@@ -150,6 +150,15 @@ function Enquiry() {
                   />
                 ))}
 
+                <ResidenceSelect
+                  value={values.residence ?? ""}
+                  error={errors.residence}
+                  onChange={(v) => setValue("residence", v)}
+                  onBlur={() => validateField("residence")}
+                />
+
+
+
                 <div className="col-span-12">
                   <label htmlFor="message" className="eyebrow block">Message</label>
                   <textarea
